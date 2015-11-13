@@ -6,6 +6,8 @@
 
 * Homepage: [http://inn-studio.com/poiauthor](http://inn-studio.com/poiauthor)
 
+* Require: PHP5.5+ / WordPress 4.3.1+
+
 # screenshots
 [![](http://ww1.sinaimg.cn/large/686ee05djw1exzin3upotj208f06cjrn.jpg)](http://ww1.sinaimg.cn/large/686ee05djw1exzin3upotj208f06cjrn.jpg)
 
