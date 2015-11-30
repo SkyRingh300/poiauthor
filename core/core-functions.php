@@ -1,7 +1,7 @@
 <?php
 namespace poiauthor;
 class plugin_functions{
-	/**
+	/*
 	 * status_tip
 	 *
 	 * @param mixed
@@ -9,11 +9,11 @@ class plugin_functions{
 	 * @example status_tip('error','content');
 	 * @example status_tip('error','big','content');
 	 * @example status_tip('error','big','content','span');
-	 * @version 2.0.0
+	 * @version 2.0.3
 	 */
 	public static function status_tip(){
 		$args = func_get_args();
-		if(empty($args)) return false;
+			
 		$defaults = array('type','size','content','wrapper');
 		$types = array('loading','success','error','question','info','ban','warning');
 		$sizes = array('small','middle','large');
@@ -35,39 +35,40 @@ class plugin_functions{
 					$$defaults[$k] = $v;
 				}
 		}
-		$type = $type ? $type : $types[0];
-		$size = $size ? $size : $sizes[0];
-		$wrapper = $wrapper ? $wrapper : $wrappers[0];
+		if(!$type)
+			$type = $types[0];
+		if(!$size)
+			$size = $sizes[0];
+		if(!$wrapper)
+			$wrapper = $wrappers[0];
 
 		switch($type){
 			case 'success':
-				$icon = 'smiley';
+				$icon = 'check-circle';
 				break;
 			case 'error' :
-				$icon = 'no';
+				$icon = 'times-circle';
 				break;
 			case 'info':
 			case 'warning':
-				$icon = 'info';
+				$icon = 'exclamation-circle';
 				break;
 			case 'question':
 			case 'help':
-				$icon = 'editor-help';
+				$icon = 'question-circle';
 				break;
 			case 'ban':
-				$icon = 'minus';
+				$icon = 'minus-circle';
 				break;
 			case 'loading':
 			case 'spinner':
-				$icon = 'update';				
+				$icon = 'circle-o-notch fa-spin';
 				break;
 			default:
 				$icon = $type;
 		}
-
 		
-		$tpl = '<' . $wrapper . ' class="tip-status tip-status-' . $size . ' tip-status-' . $type . '"><span class="dashicons dashicons-' . $icon . '"></span><span class="after-icon">' . $content . '</span></' . $wrapper . '>';
-		return $tpl;
+		return '<' . $wrapper . ' class="tip-status tip-status-' . $size . ' tip-status-' . $type . '"><i class="fa fa-' . $icon . ' fa-fw"></i> ' . $content . '</' . $wrapper . '>';
 	}
 	/**
 	 * get_current_url

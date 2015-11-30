@@ -75,4 +75,16 @@ class plugin_features{
 		
 		return $admin_ajax_url . '?' . http_build_query($param);
 	}
+	public static function is_ajax(){
+		static $cache = null;
+		if($cache === null)
+			$cache = defined('DOING_AJAX') && DOING_AJAX;
+		return $cache;
+	}
+	public static function is_admin(){
+		static $cache = null;
+		if($cache === null)
+			$cache = (bool)\is_admin();
+		return $cache;
+	}
 }

@@ -1,13 +1,13 @@
 <?php
 /*
-Plugin Name: Poi author meta box
-Plugin URI: http://inn-studio.com/poiauthor
-Description: A better performance author meta box instead of the build-in of WordPress.
-Author: INN STUDIO
-Author URI: http://inn-studio.com
-Version: 1.0.0
-Text Domain: poiauthor
-Domain Path: /languages
+Plugin Name: 	Poi author meta box
+Plugin URI: 	http://inn-studio.com/poiauthor
+Description: 	A better performance author meta box instead of the build-in of WordPress.
+Author: 		INN STUDIO
+Author URI: 	http://inn-studio.com
+Version: 		1.0.1
+Text Domain: 	poiauthor
+Domain Path: 	/languages
 */
 namespace poiauthor;
 
@@ -16,7 +16,7 @@ class poiauthor{
 		\load_plugin_textdomain(
 			__NAMESPACE__, 
 			false, 
-			dirname(\plugin_basename(__FILE__)). '/languages/'
+			\plugin_basename(__DIR__). '/languages/'
 		);
 	}
 	private static function update(){
@@ -24,10 +24,8 @@ class poiauthor{
 			include __DIR__ . '/inc/update.php';
 		}
 		$updater = new inc\updater();
-		$updater->name = self::get_header_translate('plugin_name');
-		$updater->basename = basename(__DIR__);
-		$updater->dir = __NAMESPACE__;
-		$updater->filename = basename(__FILE__);
+		$updater->dir = __DIR__;
+		$updater->file = __FILE__;
 		$updater->slug = __NAMESPACE__;
 		$updater->checker_url = __('http://update.inn-studio.com') . '/?action=get_update&slug=' . __NAMESPACE__;
 		$updater->init();
@@ -37,14 +35,14 @@ class poiauthor{
 		include __DIR__ . '/core/core-functions.php';
 		include __DIR__ . '/core/core-options.php';
 		include __DIR__ . '/core/core-features.php';
-
 		
-		\add_action('admin_enqueue_scripts', __CLASS__ . '::backend_enqueue_scripts', 999);
-		\add_action('admin_enqueue_scripts', __CLASS__ . '::post_new_enqueue_scripts', 999);
-		
-		self::tdomain();
-		
-		if(self::is_admin()){
+		if(plugin_features::is_admin()){
+			
+			self::tdomain();
+			
+			\add_action('admin_enqueue_scripts', __CLASS__ . '::backend_enqueue_scripts', 999);
+			\add_action('admin_enqueue_scripts', __CLASS__ . '::post_new_enqueue_scripts', 999);
+			
 			/** update */
 			self::update();
 			
@@ -58,24 +56,21 @@ class poiauthor{
 				foreach(['post','page','attachment'] as $v)
 					\remove_meta_box('authordiv', $v, 'normal');
 			});
+			/** add meta box */
+			\add_action('admin_init', __CLASS__ . '::meta_box_add');
 		}
-		
 		/** ajax */
-		\add_action('wp_ajax_' . __NAMESPACE__, __CLASS__ . '::process');
-		
+		if(plugin_features::is_ajax()){
+			\add_action('wp_ajax_' . __NAMESPACE__, __CLASS__ . '::process');
+			
+		}
 		/** settings */
-		\add_action('plguin_base_settings_' . __NAMESPACE__, __CLASS__ . '::display_backend_base_settings');
-		\add_action('plguin_help_settings_' . __NAMESPACE__, __CLASS__ . '::display_backend_help_setting');
-
-		/** add meta box */
-		\add_action('admin_init', __CLASS__ . '::meta_box_add');
+		if(plugin_options::is_options_page()){
+			\add_action('plguin_base_settings_' . __NAMESPACE__, __CLASS__ . '::display_backend_base_settings');
+			\add_action('plguin_help_settings_' . __NAMESPACE__, __CLASS__ . '::display_backend_help_setting');
+		}
 	}
-	public static function is_admin(){
-		static $cache = null;
-		if($cache === null)
-			$cache = (bool)is_admin();
-		return $cache;
-	}
+	
 	public static function get_header_translate($key = null){
 		$trs = [
 			'plugin_name' => __('Poi author meta box'),

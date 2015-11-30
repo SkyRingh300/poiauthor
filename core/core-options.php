@@ -11,6 +11,8 @@ class plugin_options{
 		\add_action('admin_menu', __CLASS__ . '::add_page');
 		
 		\add_action('wp_ajax_options_save_' . __NAMESPACE__ , __CLASS__ . '::process');
+		
+		\add_filter('admin_footer', __CLASS__ . '::backend_js', 1);
 	}
 	public static function plugin_action_links($links){
 		return array_merge([
@@ -31,7 +33,7 @@ class plugin_options{
 		];
 		?>
 		<script>
-		window.THEME_CONFIG_<?= __NAMESPACE__;?> = <?= json_encode(\apply_filters('backend_js_config_' . __NAMESPACE__ ,(array)$config));?>;
+		window.PLUGIN_CONFIG_<?= __NAMESPACE__;?> = <?= json_encode(\apply_filters('backend_js_config_' . __NAMESPACE__, (array)$config));?>;
 		</script>
 		<?php
 	}
@@ -64,12 +66,12 @@ class plugin_options{
 						</a>
 					
 						<span class="tab-item" title="<?= __('The plugin common basic settings.');?>">
-							<span class="dashicons dashicons-admin-generic"></span>
+							<i class="fa fa-cog"></i> 
 							<span class="tx"><?= __('Basic settings');?></span>
 						</span><!-- basic settings -->
 						
 						<span class="tab-item" title="<?= __('If you in trouble, maybe this label can help you.');?>">
-							<span class="dashicons dashicons-editor-help"></span>
+							<i class="fa fa-question-circle"></i> 
 							<span class="tx"><?= __('About &amp; help');?></span>
 						</span><!-- about and help -->
 						
@@ -90,11 +92,11 @@ class plugin_options{
 				<p>
 					<input type="hidden" name="<?= __NAMESPACE__;?>[nonce]" value="<?= \wp_create_nonce(__NAMESPACE__);?>">
 					
-					<button type="submit" class="button button-primary button-large"><span class="dashicons dashicons-yes"></span> <?= __('Save all settings');?></button>
+					<button type="submit" class="button button-primary button-large"><i class="fa fa-check"></i> <?= __('Save all settings');?></button>
 					
 					<label for="options-restore" class="label-options-restore" title="<?= __('Something error with plugin? Try to restore. Be careful, plugin options will be cleared up!');?>">
 						<input id="options-restore" name="<?= __NAMESPACE__;?>[restore]" type="checkbox" value="1"/>
-						<?= __('Restore to plugin default options');?> <span class="dashicons dashicons-backup"></span></i>
+						<?= __('Restore to plugin default options');?> <i class="fa fa-history"></i>
 					</label>
 				</p>
 			</form>
@@ -136,7 +138,7 @@ class plugin_options{
 		return __NAMESPACE__ . '-core-options';
 	}
 	public static function is_options_page(){
-		return self::current_user_can('manage_options') && \is_admin() && isset($_GET['page']) && $_GET['page'] === self::get_options_page_slug();
+		return self::current_user_can('manage_options') && plugin_features::is_admin() && isset($_GET['page']) && $_GET['page'] === self::get_options_page_slug();
 	}
 	public static function get_options_default(){
 		return \apply_filters('plugin_options_default_' . __NAMESPACE__,[]);

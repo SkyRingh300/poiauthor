@@ -2,28 +2,29 @@
 namespace poiauthor\inc;
 
 class updater{
-	public $name;
-	public $slug;
-	public $checker_url;
-	public $basename;
-	public $filename;
-	public $iden;
 	public $dir;
+	public $slug;
+	public $file;
+	public $checker_url;
 	
+	private $dir_basename;
+	private $filename;
 	private $response;
 	private $plugin_data;
 	private $plugin_activated;
 	
 	public function init(){
-		$this->iden = $this->basename . '/' . $this->filename;
+		$this->dir_basename = basename($this->dir);
+		$this->filename = basename($this->file);
+		$this->plugin = $this->dir_basename . '/' . $this->filename;
 		
 		\add_filter('pre_set_site_transient_update_plugins',  [ $this,'filter_pre_set_site_transient_update_plugins' ]);
 		\add_filter('plugins_api', [ $this, 'filter_plugins_api' ], 10, 3);
-		\add_filter('upgrader_pre_install', [ $this, 'filter_upgrader_pre_install' ], 10, 2);
+		//\add_filter('upgrader_pre_install', [ $this, 'filter_upgrader_pre_install' ], 10, 2);
 		\add_filter('upgrader_post_install', [ $this, 'filter_upgrader_post_install' ], 10, 3);
 	}
 	public function filter_pre_set_site_transient_update_plugins($transient){
-		if (!isset($transient->checked[$this->iden]))
+		if (!isset($transient->checked[$this->plugin]))
 			return $transient;
 
 		$this->response = $this->get_response($this->checker_url);
@@ -31,13 +32,14 @@ class updater{
 			return $transient;
 
 		$response = $this->to_wp_format($this->response);
+		
 		/** version compare */
-		if(version_compare($transient->checked[$this->iden], $response['new_version'], '>='))
+		if(version_compare($transient->checked[$this->plugin], $response['new_version'], '>='))
 			return $transient;
 			
 		/** have new version */
-		$transient->response[$this->iden] = (object)$response;
-		$transient->response[$this->iden]->plugin = $this->iden;
+		$transient->response[$this->plugin] = (object)$response;
+		$transient->response[$this->plugin]->plugin = $this->plugin;
 
 		return $transient;
 	}
@@ -106,33 +108,20 @@ class updater{
 			return $this->get_root_dir($sub_dirs[0]);
 		return $sub_dirs[0];
 	}
-	private function remove($path){
-		if(is_dir($path)){
-			foreach( glob($path . '/*') as $file ){
-				$this->remove($file);
-			}
-			rmdir($path);
-		}else{
-			unlink($path);
-		}
-	}
 	public function filter_upgrader_post_install( $true, $hook_extra, $result ){
 		if($result['destination_name'] == $this->slug){
 			return $result;
-		}else{
+			
+		/** is download from github */
+		}elseif($result['destination_name'] == $this->slug . '-master'){
 			$root_dir = $this->get_root_dir($result['destination']);
 			$new_destination = $result['local_destination'] . '/' . $this->slug . '/';
 			rename($root_dir,$new_destination);
-			$this->remove($result['destination']);
 			$result['destination'] = $new_destination;
 			$result['remote_destination'] = $new_destination;
 			$result['destination_name'] = $this->slug;
 			
 		}
-		
-		if ( $this->plugin_activated )
-			$activate = \activate_plugin( $this->iden );
-
 		return $result;
 	}
 	private function to_wp_format(array $response){
