@@ -5,7 +5,7 @@ Plugin URI: 	http://inn-studio.com/poiauthor
 Description: 	A better performance author meta box instead of the build-in of WordPress.
 Author: 		INN STUDIO
 Author URI: 	http://inn-studio.com
-Version: 		1.0.1
+Version: 		1.0.2
 Text Domain: 	poiauthor
 Domain Path: 	/languages
 */
@@ -24,6 +24,7 @@ class poiauthor{
 			include __DIR__ . '/inc/update.php';
 		}
 		$updater = new inc\updater();
+		$updater->name = self::get_header_translate('plugin_name');
 		$updater->dir = __DIR__;
 		$updater->file = __FILE__;
 		$updater->slug = __NAMESPACE__;

@@ -6,6 +6,7 @@ class updater{
 	public $slug;
 	public $file;
 	public $checker_url;
+	public $name;
 	
 	private $dir_basename;
 	private $filename;
