@@ -4,11 +4,13 @@
 > 一款 WordPress 插件。
 > 使用性能更好的作者栏目代替 WordPress 内置的作者栏目。解决了上万用户带来的无法打开文章页和文章列表页问题。
 
-* Homepage: [http://inn-studio.com/poiauthor](http://inn-studio.com/poiauthor)
+* Homepage: [https://inn-studio.com/poiauthor](https://inn-studio.com/poiauthor)
 
-* Require: PHP5.5+ / WordPress 4.3.1+
+* License：PTU(Pay to use) 付费使用，请到官网购买。
+
+* Require: PHP5.6+ / WordPress 4.6.1+
 
 # screenshots
-[![](http://ww1.sinaimg.cn/large/686ee05djw1exzin3upotj208f06cjrn.jpg)](http://ww1.sinaimg.cn/large/686ee05djw1exzin3upotj208f06cjrn.jpg)
+[![](https://ws1.sinaimg.cn/large/686ee05djw1exzin3upotj208f06cjrn.jpg)](https://ws1.sinaimg.cn/large/686ee05djw1exzin3upotj208f06cjrn.jpg)
 
-[![](http://ww3.sinaimg.cn/large/686ee05djw1exzin14isej208b08gt99.jpg)](http://ww3.sinaimg.cn/large/686ee05djw1exzin14isej208b08gt99.jpg)
+[![](https://ws3.sinaimg.cn/large/686ee05djw1exzin14isej208b08gt99.jpg)](https://ws3.sinaimg.cn/large/686ee05djw1exzin14isej208b08gt99.jpg)
