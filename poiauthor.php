@@ -5,7 +5,7 @@
  * Description:     A better performance author meta box instead of the build-in of WordPress.
  * Author:          INN STUDIO
  * Author URI:      https://inn-studio.com
- * Version:         3.0.0
+ * Version:         2.0.0
  * Text Domain:     poiauthor
  * Domain Path:     /Languages
  *
